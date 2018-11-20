@@ -21,7 +21,9 @@ class CityTestCase(TestCase):
         client = Client()
         cache_mock.get.return_value = None
         cache_mock.set.return_value = None
-        mock_request.get.return_value.json.return_value = {'main':{'temp':'temp'}, 'weather':[{'description':'', 'icon':''}]}
+        mock_request.get.return_value.json.return_value = {'main':{'temp':'temp'},
+                                                           'weather':[{'description':'',
+                                                                       'icon':''}]}
         response = client.post('/', data=urlencode({"name": "Barcelona"}),
                                content_type='application/x-www-form-urlencoded')
         self.assertEqual(len(response.context['weather_data']), 1)
@@ -55,7 +57,9 @@ class CityTestCase(TestCase):
         City.objects.all().delete()
         City.objects.create(name="Barcelona")
         cache_mock.set.return_value = "City"
-        cache_mock.get.return_value({"city": "Barcelona", "temperature":"2", "description":"hey", "icon": "ehey"})
+        cache_mock.get.return_value({"city": "Barcelona",
+                                     "temperature":"2",
+                                     "description":"hey", "icon": "ehey"})
         client = Client()
         client.get('/')
         self.assertFalse(mock_request.called)
@@ -67,6 +71,7 @@ class CityTestCase(TestCase):
         client = Client()
         cache_mock.get.return_value = None
         cache_mock.set.return_value = None
-        client.post('/', data=urlencode({"name": "Barcelona"}), content_type='application/x-www-form-urlencoded')
+        client.post('/', data=urlencode({"name": "Barcelona"}),
+                    content_type='application/x-www-form-urlencoded')
         mock_request.get.assert_called_once_with("https://api.openweathermap.org/data/2.5/weather?q=Barcelona&units=metric&appid=6ccee1891e64b258629ef5942ff1d522")
 
