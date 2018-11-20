@@ -1,0 +1,4 @@
+django
+requests
+pycrypto==2.6.1
+python-memcached==1.59
