@@ -7,6 +7,7 @@ import base64
 from .models import City
 from .forms import CityForm
 
+
 def index(request):
     KEY = 'CA6A1A3A99A9BA95D3B32A4E43132A8C' 
     url = "https://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid=6ccee1891e64b258629ef5942ff1d522"
