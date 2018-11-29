@@ -68,6 +68,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'weather_project.wsgi.application'
 
 
+SECRET_KEY = os.environ.get('SECRET_KEY')
+
 DATABASES = {
     'default': {
         'ENGINE': os.environ.get('DB_ENGINE'),
