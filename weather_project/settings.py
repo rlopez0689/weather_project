@@ -22,9 +22,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost').split(',')
 
-
+WEATHER_API_KEY = os.environ.get('WEATHER_API_KEY')
+WEATHER_API = "https://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid={}"
 # Application definition
 
 INSTALLED_APPS = [
@@ -78,6 +79,13 @@ DATABASES = {
         'PASSWORD': os.environ.get('DB_PASSWORD'),
         'HOST': os.environ.get('DB_HOST'),
         'PORT': os.environ.get('PORT')
+    }
+}
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': os.environ.get("CACHE_URL"),
     }
 }
 
