@@ -20,9 +20,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(os.environ.get('DEBUG'))
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost').split(',')
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 
 WEATHER_API_KEY = os.environ.get('WEATHER_API_KEY')
 WEATHER_API = "https://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid={}"
@@ -129,6 +132,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
 
 try:
     from weather_project.local_settings import *

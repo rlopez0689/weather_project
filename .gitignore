@@ -91,3 +91,4 @@ venv
 db.sqlite3
 
 ngrok
+static/
