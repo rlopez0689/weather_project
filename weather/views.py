@@ -1,9 +1,8 @@
 import requests
 from django.shortcuts import render
 from django.core.cache import cache
-from Crypto.Cipher import AES
-import base64
 
+from django.core.paginator import Paginator
 from django.conf import settings
 
 from .models import City
@@ -11,7 +10,6 @@ from .forms import CityForm
 
 
 def index(request):
-    KEY = 'CA6A1A3A99A9BA95D3B32A4E43132A8C' 
 
     if request.method == 'POST':
         form = CityForm(request.POST)
@@ -23,12 +21,12 @@ def index(request):
         form = CityForm()
 
     weather_data = []
-    cities = City.objects.all()
+    cities = City.objects.all().order_by('-created_at') if all else City.objects.all().order_by('-created_at')
+    paginator = Paginator(cities, 3)
+    page = request.GET.get('page', 1)
+    cities = paginator.get_page(page)
     for city in cities:
-        cache_time = 300
-        cipher = AES.new(KEY, AES.MODE_ECB)
-        cache_key = base64.b64encode(cipher.encrypt(city.name.rjust(32)))
-        city_weather = cache.get(cache_key)
+        city_weather = cache.get(city.name.replace(" ", ""))
         if not city_weather:
             r = requests.get(settings.WEATHER_API.format(city, settings.WEATHER_API_KEY)).json()
             city_weather = {
@@ -37,12 +35,10 @@ def index(request):
                 'description': r['weather'][0]['description'],
                 'icon': r['weather'][0]['icon']
             }
-            cache.set(cache_key, city_weather, cache_time)
-        else:
-            print("Value cached ", city)
+            cache.set(city.name.replace(" ", ""), city_weather, settings.CACHE_TIME)
         weather_data.append(city_weather)
-
-    context = {'weather_data': weather_data, 'form': form}
+    context = {'weather_data': weather_data, 'form': form, 'cities': cities,
+               'pages': range(1, cities.paginator.num_pages+1)}
     return render(request, 'index.html', context)
 
 

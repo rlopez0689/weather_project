@@ -78,8 +78,20 @@
             {% endfor %}
           </div>
         </div>
+
+        <nav class="pagination" role="navigation" aria-label="pagination">
+          <a {% if cities.has_previous %} href="?page={{ cities.previous_page_number }}" {% endif %} class="pagination-previous" title="This is the first page" {% if not cities.has_previous %}disabled{% endif %}>Previous</a>
+          <a class="pagination-next" {% if cities.has_next %} href="?page={{ cities.next_page_number }}" {% endif %} {% if not cities.has_next %}disabled{% endif %}>Next page</a>
+          <ul class="pagination-list">
+            {% for page in pages %}
+                <a href="?page={{ page }}" class="pagination-link {% if cities.number == page %} is-current {% endif %} ">{{  page  }}</a>
+            {% endfor %}
+          </ul>
+        </nav>
+
       </div>
     </section>
-    <footer class="footer"></footer>
+    <footer class="footer">
+    </footer>
   </body>
 </html>
