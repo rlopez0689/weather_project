@@ -30,5 +30,6 @@ jobs:
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
         DB_ENGINE: ${{ secrets.DB_ENGINE }}
         DB_NAME: ${{ secrets.DB_NAME }}
+        CACHE_URL: ${{ secrets.CACHE_URL }}
       run: |
         python manage.py test
